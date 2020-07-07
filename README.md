@@ -9,6 +9,7 @@ Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a s
 Before running the demo make sure to install CDK as mentioned here: [How to install CDK](https://github.com/aws/aws-cdk/blob/master/README.md).
 You will deploy the demo project to your AWS Account, make sure you have set the current profile with `AWS_PROFILE` and AWS CLI credentials.
 Partice practice practice, try to have multiple dry runs to safely navigate through the code and be able explain the details.
+Do not paste the content into the editor, instead write the statements and explain your thinking. 
 
 ## Start
 
@@ -66,12 +67,6 @@ export class CdkDemoStack extends cdk.Stack {
     // The code that defines your stack goes here
   }
 }
-```
-
-Build the project:
-
-```
-npm run build
 ```
 
 Add the dependencies of the AWS constructs we will be using during the demo:
