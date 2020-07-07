@@ -2,7 +2,7 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup [here](https://github.com/darko-mesaros/aws-cdk-for-serverless).
+Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup [here](https://github.com/darko-mesaros/aws-cdk-for-serverless). If there are any problems, please open an issue.
 
 ## Requirements
 
