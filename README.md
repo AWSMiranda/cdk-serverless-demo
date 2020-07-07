@@ -32,7 +32,7 @@ Finally we will add an API gateway with an HTTP POST endpoint.
 
 Creata a new project from scratch:
 
-```sh
+```bash
 mkdir cdk-demo
 cd cdk-demo
 cdk init app -l typescript
@@ -57,7 +57,7 @@ This will create a directory structure like this:
 Load the project into an IDE of your choice, JetBrains WebStorm, VS Code, Vim, Emasc, etc.
 Open `lib/cdk-demo-stack.ts` file, it should look like this:
 
-```
+```ts
 import * as cdk from '@aws-cdk/core';
 
 export class CdkDemoStack extends cdk.Stack {
@@ -71,7 +71,7 @@ export class CdkDemoStack extends cdk.Stack {
 
 Add the dependencies of the AWS constructs we will be using during the demo:
 
-```
+```bash
 npm install @aws-cdk/aws-lambda @aws-cdk/aws-dynamodb @aws-cdk/aws-apigateway
 ```
 
@@ -79,7 +79,7 @@ Explain that each package is added to have access to service specific constructs
 
 Import this packages into `lib/cdk-demo-stack.ts` file at the top:
 
-```
+```ts
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
@@ -87,7 +87,7 @@ import * as dynamodb from '@aws-cdk/aws-dynamodb';
 
 Now let us create a table, add this statement into the constructor under `super()` call:
 
-```
+```ts
 const table = new dynamodb.Table(this, 'people', {
   partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
   tableName: "peopleTable",
@@ -101,7 +101,7 @@ Build the project again with `npm run build` and compile to CloudFormation with 
 This will show the CloudFormation template output of the CDK stack.
 Now we are ready to deploy:
 
-```
+```bash
 cdk deploy
 ```
 
@@ -109,7 +109,7 @@ Open the AWS console to show that the table has been created with the same value
 
 Now create a Lambda function. First, create a folder `lambda` in the project root directory and add a javascript file `createUser.js`:
 
-```
+```bash
 mkdir lambda
 cd lambda
 touch createUser.js
@@ -117,7 +117,7 @@ touch createUser.js
 
 Open `lambda/createUser.js` file and add the handler. You can also prepare this part before the demo, there is no value to go through the code, we want to focus on CDK.
 
-```
+```js
 const AWS = require('aws-sdk');
 
 var TableName = process.env.TABLE_NAME
@@ -156,7 +156,7 @@ exports.handler = (event, context, callback) => {
 
 Go back to `lib/cdk-demo-stack.ts` and add the lambda function to your stack:
 
-```
+```ts
 const createLambda = new lambda.Function(this, 'CreateHandler', {
   runtime: lambda.Runtime.NODEJS_10_X,
   code: lambda.Code.fromAsset('lambda'),
@@ -171,7 +171,7 @@ Run `npm build` and `cdk deploy`. CDK will show you new resources that will be c
 
 We still need an API gateway to read or write the data:
 
-```
+```ts
 const api = new apigw.RestApi(this, "apiGateway);
 const apiCreateInteg = new apigw.LambdaIntegration(createLambda);
 const apiCreate = api.root.addResource('create');
@@ -183,7 +183,7 @@ This will create an API gateway with POST method, add a Lambda integration. The 
 
 Build and deploy the app again: "npm run build && cdk deploy". After the deployment CDk will output the endpoint of the API gateway. We can now write data to the dynamoDB table with a cURL POST request:
 
-```
+```bash
 curl -X POST https://YOUR_GENERATED_API_GATEWAY_URL/prod/create?name=Jane&age=42
 ```
 
