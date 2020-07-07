@@ -2,15 +2,32 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup in [here](https://github.com/darko-mesaros/aws-cdk-for-serverless).
+Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup [here](https://github.com/darko-mesaros/aws-cdk-for-serverless).
 
 ## Requirements
 
 Before running the demo make sure to install CDK as mentioned here: [How to install CDK](https://github.com/aws/aws-cdk/blob/master/README.md).
-You will deploy the demo project to your AWS Account, make sure you have set the current profile with.
-Partice practice practice, try to have multiple try runs to safely navigate through code and explain the details.
+You will deploy the demo project to your AWS Account, make sure you have set the current profile with `AWS_PROFILE` and AWS CLI credentials.
+Partice practice practice, try to have multiple dry runs to safely navigate through the code and be able explain the details.
 
 ## Start
+
+Explain the setup we are going to build:
+
+
+
+    +---------------+         +-------------------+       +------------------+
+    |               |         |                   |       |                  |
+    |  API Gateway  +-------->+  Lambda Function  +------>+  DynamoDB Table  |
+    |               |         |                   |       |                  |
+    +---------------+         +-------------------+       +------------------+
+
+
+In this case we will have an API gateway with POST endpoint to write data about people (name and age) into a dynamoDB table.
+First we will create a dynamoDB table were we store data about people, with name and age attributes. 
+Then we will add a AWS Lambda function to write the user data.
+Finally we will add an API gateway with an HTTP POST endpoint.
+
 
 Creata a new project from scratch:
 
@@ -63,6 +80,8 @@ Add the dependencies of the AWS constructs we will be using during the demo:
 npm install @aws-cdk/aws-lambda @aws-cdk/aws-dynamodb @aws-cdk/aws-apigateway
 ```
 
+Explain that each package is added to have access to service specific constructs.
+
 Import this packages into `lib/cdk-demo-stack.ts` file at the top:
 
 ```
@@ -84,16 +103,16 @@ const table = new dynamodb.Table(this, 'people', {
 While typing the properties of the table, show that some of them are required and some are optional.
 If you use autocomplete features of the IDE, you can also highlight all the possible values that developers can see right in the IDE, without going to the browser and search in the documentation.
 Build the project again with `npm run build` and compile to CloudFormation with `cdk synth`.
-This will show the audience the output of the project.
-Now we are ready to deploy
+This will show the CloudFormation template output of the CDK stack.
+Now we are ready to deploy:
 
 ```
 cdk deploy
 ```
 
-Open the console to show the table with the same values has been created in the AWS Account. Show the table name, the partitionKey and the billing settings `PAY_PER_REQUEST`.
+Open the AWS console to show that the table has been created with the same values in the AWS Account. Show the table name, the partitionKey and the billing settings `PAY_PER_REQUEST`.
 
-We will create a Lambda function. Create a folder `lambda` in the project root directory and add a javascript file `createUser.js`:
+Now create a Lambda function. First, create a folder `lambda` in the project root directory and add a javascript file `createUser.js`:
 
 ```
 mkdir lambda
