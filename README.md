@@ -184,7 +184,7 @@ This will create an API gateway with POST method, add a Lambda integration. The 
 Build and deploy the app again: "npm run build && cdk deploy". After the deployment CDk will output the endpoint of the API gateway. We can now write data to the dynamoDB table with a cURL POST request:
 
 ```bash
-curl -X POST https://YOUR_GENERATED_API_GATEWAY_URL/prod/create?name=Jane&age=42
+curl -X POST 'https://YOUR_GENERATED_API_GATEWAY_URL/prod/create?name=Jane&age=42'
 ```
 
 Open DynamoDB and show that the `name` and `age` is stored in the dynamoDB table. You can run `cdk synth` to show the final result of the generated CloudFormation template, to emphasize on quick prototyping with CDK without spending too much time with YAML or JSON files.
