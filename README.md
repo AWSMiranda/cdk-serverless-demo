@@ -172,7 +172,7 @@ Run `npm build` and `cdk deploy`. CDK will show you new resources that will be c
 We still need an API gateway to read or write the data:
 
 ```ts
-const api = new apigw.RestApi(this, "apiGateway);
+const api = new apigw.RestApi(this, "apiGateway");
 const apiCreateInteg = new apigw.LambdaIntegration(createLambda);
 const apiCreate = api.root.addResource('create');
 apiCreate.addMethod('POST', apiCreateInteg);
