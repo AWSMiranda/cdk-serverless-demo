@@ -2,14 +2,17 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup [here](https://github.com/darko-mesaros/aws-cdk-for-serverless). If there are any problems, please open an issue.
+Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial.
+You can find the result code of this tutorial [here](https://github.com/am29d/cdk-serverless-demo/tree/output).
+
+If there are any problems, please open an issue.
 
 ## Requirements
 
 Before running the demo make sure to install CDK as mentioned here: [How to install CDK](https://github.com/aws/aws-cdk/blob/master/README.md).
 You will deploy the demo project to your AWS Account, make sure you have set the current profile with `AWS_PROFILE` and AWS CLI credentials.
 Partice practice practice, try to have multiple dry runs to safely navigate through the code and be able explain the details.
-Do not paste the content into the editor, instead write the statements and explain your thinking. 
+Do not paste the content into the editor, instead write the statements and explain your thinking.
 
 ## Start
 
@@ -25,7 +28,7 @@ Explain the setup we are going to build:
 
 
 In this case we will have an API gateway with POST endpoint to write data about people (name and age) into a dynamoDB table.
-First we will create a dynamoDB table were we store data about people, with name and age attributes. 
+First we will create a dynamoDB table were we store data about people, with name and age attributes.
 Then we will add a AWS Lambda function to write the user data.
 Finally we will add an API gateway with an HTTP POST endpoint.
 
@@ -91,7 +94,8 @@ Now let us create a table, add this statement into the constructor under `super(
 const table = new dynamodb.Table(this, 'people', {
   partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
   tableName: "peopleTable",
-  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+  removalPolicy: RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
 });
 ```
 
@@ -128,29 +132,29 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (event, context, callback) => {
 
-    const Item = {};
-    Item['name'] = event.queryStringParameters.name;
-    Item['location'] = event.queryStringParameters.location;
-    Item['age'] = event.queryStringParameters.age;
+  const Item = {};
+  Item['name'] = event.queryStringParameters.name;
+  Item['location'] = event.queryStringParameters.location;
+  Item['age'] = event.queryStringParameters.age;
 
-    dynamo.put({TableName, Item}, function (err, data) {
-        if (err) {
-            console.log('error', err);
-            callback(err, null);
-        } else {
-            var response = {
-                statusCode: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-                    'Access-Control-Allow-Credentials': 'true'
-                },
-                isBase64Encoded: false
-            };
-            console.log('success: returned ${data.Item}');
-            callback(null, response);
-        }
-    });
+  dynamo.put({TableName, Item}, function (err, data) {
+    if (err) {
+      console.log('error', err);
+      callback(err, null);
+    } else {
+      var response = {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+          'Access-Control-Allow-Credentials': 'true'
+        },
+        isBase64Encoded: false
+      };
+      console.log('success: returned ${data.Item}');
+      callback(null, response);
+    }
+  });
 };
 ```
 
