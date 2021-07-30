@@ -2,7 +2,10 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. You can find all the code in a slightly different setup [here](https://github.com/darko-mesaros/aws-cdk-for-serverless). If there are any problems, please open an issue.
+Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial. 
+You can find the result code of this tutorial [here](https://github.com/am29d/cdk-serverless-demo/tree/output). 
+
+If there are any problems, please open an issue.
 
 ## Requirements
 
@@ -91,7 +94,8 @@ Now let us create a table, add this statement into the constructor under `super(
 const table = new dynamodb.Table(this, 'people', {
   partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
   tableName: "peopleTable",
-  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST
+  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+  removalPolicy: RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
 });
 ```
 
