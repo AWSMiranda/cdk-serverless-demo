@@ -6,7 +6,7 @@ phases:
       nodejs: 14
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - echo Nothing to do in the prebuild phase...
   build:
     commands:
       - echo Build started on `date`
