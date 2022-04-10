@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
   
   try {
     const res = await dynamo.put({TableName, Item}).promise();
-    console.log(Item)
+    console.log(event)
     return {
         statusCode: 200,
         headers: {
