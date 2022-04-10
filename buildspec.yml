@@ -6,10 +6,10 @@ phases:
       nodejs: 14
   pre_build:
     commands:
-      - echo Nothing to do in the prebuild phase...
+      - echo pre build
   build:
     commands:
-      - echo Build started on `date`
+      - cdk deploy
   post_build:
     commands:
       - echo Build completed on `date`
