@@ -2,8 +2,6 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial.
-You can find the result code of this tutorial [here](https://github.com/am29d/cdk-serverless-demo/tree/output/cdk-demo).
 
 If there are any problems, please open an issue.
 
