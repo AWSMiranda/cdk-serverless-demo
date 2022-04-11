@@ -83,6 +83,7 @@ Explain that each package is added to have access to service specific constructs
 Import this packages into `lib/cdk-demo-stack.ts` file at the top:
 
 ```ts
+import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
