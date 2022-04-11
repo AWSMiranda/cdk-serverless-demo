@@ -158,7 +158,7 @@ Go back to `lib/cdk-demo-stack.ts` and add the lambda function to your stack:
 
 ```ts
 const createLambda = new lambda.Function(this, 'CreateHandler', {
-  runtime: lambda.Runtime.NODEJS_10_X,
+  runtime: lambda.Runtime.NODEJS_14_X,
   code: lambda.Code.fromAsset('lambda'),
   environment: { 'TABLE_NAME': 'peopleTable' },
   handler: 'createUser.handler'
