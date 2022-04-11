@@ -15,7 +15,6 @@ exports.handler = async (event, context) => {
   
   try {
     const res = await dynamo.put({TableName, Item}).promise();
-    console.log(event)
     return {
         statusCode: 200,
         headers: {
@@ -23,30 +22,11 @@ exports.handler = async (event, context) => {
           'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
           'Access-Control-Allow-Credentials': 'true'
         },
-        isBase64Encoded: false
+        isBase64Encoded: false,
+        body: 'Successfully uploaded '+ Item['name']
     }
   } catch (error){
     console.log("error update user", error)
     throw error
   }
-  
-
-  // dynamo.put({TableName, Item}, function (err, data) {
-  //   if (err) {
-  //     console.log('error', err);
-  //     callback(err, null);
-  //   } else {
-  //     var response = {
-  //       statusCode: 200,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
-  //         'Access-Control-Allow-Credentials': 'true'
-  //       },
-  //       isBase64Encoded: false
-  //     };
-  //     console.log('success: returned ${data.Item}');
-  //     callback(null, response);
-  //   }
-  // });
 };
