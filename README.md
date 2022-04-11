@@ -83,20 +83,20 @@ Explain that each package is added to have access to service specific constructs
 Import this packages into `lib/cdk-demo-stack.ts` file at the top:
 
 ```ts
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 ```
 
 Now let us create a table, add this statement into the constructor under `super()` call:
 
 ```ts
-const table = new dynamodb.Table(this, 'people', {
-  partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
-  tableName: "peopleTable",
-  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-  removalPolicy: RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
-});
+    const table = new dynamodb.Table(this, 'people', {
+      partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
+      tableName: "peopleTable",
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
+    });
 ```
 
 While typing the properties of the table, show that some of them are required and some are optional.
@@ -130,19 +130,17 @@ AWS.config.update({region: region})
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context) => {
 
   const Item = {};
   Item['name'] = event.queryStringParameters.name;
   Item['location'] = event.queryStringParameters.location;
   Item['age'] = event.queryStringParameters.age;
-
-  dynamo.put({TableName, Item}, function (err, data) {
-    if (err) {
-      console.log('error', err);
-      callback(err, null);
-    } else {
-      var response = {
+  
+  try {
+    const res = await dynamo.put({TableName, Item}).promise();
+    console.log(event)
+    return {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
@@ -150,11 +148,11 @@ exports.handler = (event, context, callback) => {
           'Access-Control-Allow-Credentials': 'true'
         },
         isBase64Encoded: false
-      };
-      console.log('success: returned ${data.Item}');
-      callback(null, response);
     }
-  });
+  } catch (error){
+    console.log("error update user", error)
+    throw error
+  }
 };
 ```
 
