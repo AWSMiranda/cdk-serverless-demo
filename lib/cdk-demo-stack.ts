@@ -17,7 +17,7 @@ export class CdkDemoStack extends Stack {
     });
     
     const createLambda = new lambda.Function(this, 'CreateHandler', {
-      runtime: lambda.Runtime.NODEJS_10_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('lambda'),
       environment: { 'TABLE_NAME': 'peopleTable' },
       handler: 'createUser.handler'
