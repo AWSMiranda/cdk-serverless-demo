@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+  pre_build:
+    commands:
+      - echo pre build
+      # - npm install aws-cdk-lib
+      # - npm install -g aws-cdk
+      - cdk --version
+  build:
+    commands:
+      - npm install
+      - cdk synth
+      - cdk deploy --require-approval never
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - node_modules

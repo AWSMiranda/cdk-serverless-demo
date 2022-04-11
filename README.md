@@ -2,8 +2,6 @@
 
 A project with instructions how to run a CDK serverless demo project, written in TypeScript.
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
-Shout-out to [Darko Mesaros](https://github.com/darko-mesaros) for providing a sample example project that has been used for this demo tutorial.
-You can find the result code of this tutorial [here](https://github.com/am29d/cdk-serverless-demo/tree/output/cdk-demo).
 
 If there are any problems, please open an issue.
 
@@ -83,20 +81,20 @@ Explain that each package is added to have access to service specific constructs
 Import this packages into `lib/cdk-demo-stack.ts` file at the top:
 
 ```ts
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 ```
 
 Now let us create a table, add this statement into the constructor under `super()` call:
 
 ```ts
-const table = new dynamodb.Table(this, 'people', {
-  partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
-  tableName: "peopleTable",
-  billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-  removalPolicy: RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
-});
+    const table = new dynamodb.Table(this, 'people', {
+      partitionKey: { name: 'name', type: dynamodb.AttributeType.STRING},
+      tableName: "peopleTable",
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY //remove table if we delete the stack, don't do in PROD!
+    });
 ```
 
 While typing the properties of the table, show that some of them are required and some are optional.
@@ -130,19 +128,17 @@ AWS.config.update({region: region})
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context) => {
 
   const Item = {};
   Item['name'] = event.queryStringParameters.name;
   Item['location'] = event.queryStringParameters.location;
   Item['age'] = event.queryStringParameters.age;
-
-  dynamo.put({TableName, Item}, function (err, data) {
-    if (err) {
-      console.log('error', err);
-      callback(err, null);
-    } else {
-      var response = {
+  
+  try {
+    const res = await dynamo.put({TableName, Item}).promise();
+    console.log(event)
+    return {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
@@ -150,11 +146,11 @@ exports.handler = (event, context, callback) => {
           'Access-Control-Allow-Credentials': 'true'
         },
         isBase64Encoded: false
-      };
-      console.log('success: returned ${data.Item}');
-      callback(null, response);
     }
-  });
+  } catch (error){
+    console.log("error update user", error)
+    throw error
+  }
 };
 ```
 
@@ -162,7 +158,7 @@ Go back to `lib/cdk-demo-stack.ts` and add the lambda function to your stack:
 
 ```ts
 const createLambda = new lambda.Function(this, 'CreateHandler', {
-  runtime: lambda.Runtime.NODEJS_10_X,
+  runtime: lambda.Runtime.NODEJS_14_X,
   code: lambda.Code.fromAsset('lambda'),
   environment: { 'TABLE_NAME': 'peopleTable' },
   handler: 'createUser.handler'
