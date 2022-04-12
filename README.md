@@ -4,7 +4,7 @@ A project with instructions how to run a CDK serverless demo project, written in
 You will not find any code files here, only the README with detailed instructions how to create a demo project step by step.
 You can find the result code of this tutorial [here](https://github.com/am29d/cdk-serverless-demo/tree/output/cdk-demo).
 
-
+Thank you!
 ## Requirements
 
 Before running the demo make sure to install CDK as mentioned here: [How to install CDK](https://github.com/aws/aws-cdk/blob/master/README.md).
