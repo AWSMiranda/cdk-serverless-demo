@@ -7,8 +7,6 @@ phases:
   pre_build:
     commands:
       - echo pre build
-      # - npm install aws-cdk-lib
-      # - npm install -g aws-cdk
       - cdk --version
   build:
     commands:
